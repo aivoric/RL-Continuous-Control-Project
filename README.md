@@ -2,8 +2,8 @@
 
 This is a deep reinforcement learning project which solves the Reacher unity environment.
 
-For a quick preview of the final trained agent:
-TBC
+An example of the reacher environment:
+!["Reacher Example"](https://github.com/aivoric/RL-Continuous-Control-Project/blob/main/reacher-example.gif?raw=true)
 
 Enjoy the read below for more details!
 
