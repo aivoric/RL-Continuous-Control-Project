@@ -1,46 +1,78 @@
 import numpy as np
-from unityagents import UnityEnvironment
 import torch
 from collections import deque
-from random import randint
+import time
+from os import path
+import pickle
+from unityagents import UnityEnvironment
+from agent import Agent
+from model import ActorCriticNetwork
 
-# This is a non-blocking call that only loads the environment.
-env = UnityEnvironment(file_name="Reacher.app", seed=1, no_graphics=False)
+# Load Reacher environment
+env = UnityEnvironment(file_name="Reacher.app", seed=1, no_graphics=True)
 
-scores = []
-scores_window = deque(maxlen=100)
-best_score = -100
-model_state_dict = {}
-
-# Get the default brain
+# Get the brain and reset environment
 brain_name = env.brain_names[0]
 brain = env.brains[brain_name]
-
-# Reset the environment
 env_info = env.reset(train_mode=True)[brain_name]
 
-# Get number of actions and state size
+# Check the number of agents:
+num_agents = len(env_info.agents)
+print('Number of agents:', num_agents)
+
+# Check the size of actions:
 action_size = brain.vector_action_space_size
-state = env_info.vector_observations[0]
-state_size = len(state)
-max_steps = 1000
+print('Action size::', action_size)
 
-for step in range(max_steps):
+# Check the size of each state:
+state_size = brain.vector_observation_space_size
+print('State size::', state_size)
     
-    # Move the environment to the next state with the appropriate action
-    env_info = env.step(action)[brain_name]             
-    
-    # Get the next state, reward, and whether the state is done
-    next_state = env_info.vector_observations[0]        
-    reward = env_info.rewards[0]                        
-    done = env_info.local_done[0]
-    
-    # Update state
-    state = next_state
-    
-    # Update the score:
-    episode_score += reward
-    if done:
-        break
+def a2c(agent, num_agents, num_episodes=300):
 
-# https://github.com/JoshVarty/Reacher/blob/master/main.py
+    all_scores = []
+    scores_window = deque(maxlen=100)
+    first_solve = True
+    best_score = 30
+
+    for episode in range(1, num_episodes + 1):
+
+        avg_score = agent.step()
+        scores_window.append(avg_score)
+        score = np.mean(scores_window)
+        all_scores.append(avg_score)
+        
+        if episode % 5 == 0:
+            print("Episode {} score: {}".format(episode, score))
+
+        if score >= best_score:
+            best_score = score
+            if first_solve:
+                print('\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(episode, score))
+                first_solve = False
+            else:
+                print('\nAchieved a better score of {:.2f} after {:d} episodes'.format(score, episode))
+            torch.save(agent.network.state_dict(), path.join('models', 'solution'))
+
+    return all_scores
+
+# Create the agent and then run the agent through the a2c algorithm:
+agent = Agent(env, brain_name, num_agents, state_size, action_size)
+scores = a2c(agent, num_agents)
+
+# Save the results:
+# TODO: Refactor this later to include various versions for experimentation:
+experiment_name = "main"
+timestamp = int(time.time())
+results_file_name = path.join('results', '{}_{}_results'.format(timestamp, experiment_name))
+model_file_name = path.join('models', '{}_{}'.format(timestamp, experiment_name))
+
+with open(results_file_name, 'wb') as handle:
+    pickle.dump(scores, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    print("\nResults saved to: {}.".format(results_file_name))
+    
+torch.save(agent.network.state_dict(), model_file_name)
+print("\nModel saved to: {}.".format(model_file_name))
+
+# Close the unity environment
+env.close()
