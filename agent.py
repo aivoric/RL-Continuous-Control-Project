@@ -23,7 +23,7 @@ class Agent:
         self.discount_rate = 0.99
         self.tau = 0.95
         self.learning_rounds = 10
-        self.ppo_clip = 0.2         
+        self.ppo_clip = 0.2
         self.gradient_clip = 5
         self.mini_batch_number = 64
 

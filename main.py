@@ -5,8 +5,8 @@ import time
 from os import path
 import pickle
 from unityagents import UnityEnvironment
-from agent import Agent
 from model import ActorCriticNetwork
+from agent import Agent
 
 # Load Reacher environment
 env = UnityEnvironment(file_name="Reacher.app", seed=1, no_graphics=True)
@@ -17,7 +17,7 @@ brain = env.brains[brain_name]
 env_info = env.reset(train_mode=True)[brain_name]
 
 # Check the number of agents:
-num_agents = len(env_info.agents)
+num_agents = 20
 print('Number of agents:', num_agents)
 
 # Check the size of actions:
