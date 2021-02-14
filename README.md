@@ -28,7 +28,7 @@ Behavior Parameters:
 To setup the environment on your machine:
 1. Install Python 3.8
 2. Clone this repository:
-        git clone https://github.com/aivoric/RL-Continuous-Navigation-Project.git
+        git clone https://github.com/aivoric/RL-Continuous-Control-Project.git
 3. Create a virtual python environment:
         python3 -m venv venv
 4. Activate it with:
@@ -43,7 +43,7 @@ To setup the environment on your machine:
 The project is broken down into the following core python files:
 - main.py
 - agent.py
-- mode.py
+- model.py
 
 The following 2 folders:
 - /models
@@ -56,6 +56,13 @@ All the other files are used by the unity environment which allow you to run the
 https://github.com/Unity-Technologies/ml-agents 
 
 ## Summary
+
+### Results
+
+The environment was solved after approximately 75 episodes.
+
+A graphic summarising the performance:
+!["Model Results"](https://github.com/aivoric/RL-Continuous-Control-Project/blob/master/results.png?raw=true)
 
 ### Learning Algorithm
 
