@@ -62,7 +62,7 @@ https://github.com/Unity-Technologies/ml-agents
 The environment was solved after approximately 75 episodes.
 
 A graphic summarising the performance:
-!["Model Results"](https://github.com/aivoric/RL-Continuous-Control-Project/blob/master/results.png?raw=true)
+!["Model Results"](https://github.com/aivoric/RL-Continuous-Control-Project/blob/main/results.png?raw=true)
 
 ### Learning Algorithm
 
