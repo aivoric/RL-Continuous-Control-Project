@@ -46,14 +46,18 @@ The project is broken down into the following core python files:
 - model.py
 
 The following 2 folders:
-- /models
-- /results
+- /models  (the solution model weights are found in here)
+- /results (the score for each episode is stored here)
 
 And the following jupyter notebook:
 - Continuous Control Results.ipynb
 
 All the other files are used by the unity environment which allow you to run the environment. Most of the files are based on version 0.4 of ml-agents which is from July 2018 so it is quite outdated. For reference, a more modern ml-agents can be downloaded from: 
 https://github.com/Unity-Technologies/ml-agents 
+
+## Training
+
+To train the model run the main.py file.
 
 ## Summary
 
@@ -78,6 +82,7 @@ The architecture is a simple Linear model which:
 - 1 inner layers with 256 input and output neurons
 - Outputs the action size
 - Relu activation function is used in each layer (apart from the output)
+- The 
 
 ### Hyperparameters
 

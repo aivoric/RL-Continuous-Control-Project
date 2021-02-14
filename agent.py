@@ -12,20 +12,20 @@ import numpy as np
 from model import ActorCriticNetwork
 
 class Agent:
+
     def __init__(self, environment, brain_name, num_agents, state_size, action_size):
-        self.learning_rate = 0.0002
-        self.discount_rate = 0.99
-        self.tau = 0.95
-        self.learning_rounds = 10
-        self.ppo_clip = 0.2
-        self.gradient_clip = 5
-        self.mini_batch_number = 64
-        
         self.environment = environment
         self.brain_name = brain_name
         self.num_agents = num_agents
         self.network = ActorCriticNetwork(state_size, action_size)
-        self.optimizer = optim.Adam(self.network.parameters(), self.learning_rate, eps=1e-5)
+        self.optimizer = optim.Adam(self.network.parameters(), 2e-4, eps=1e-5)
+
+        self.discount_rate = 0.99
+        self.tau = 0.95
+        self.learning_rounds = 10
+        self.ppo_clip = 0.2         
+        self.gradient_clip = 5
+        self.mini_batch_number = 64
 
 
     def generate_rollout(self):
@@ -36,7 +36,7 @@ class Agent:
         #Reset environment
         env_info = self.environment.reset(train_mode=True)[self.brain_name]
         states = env_info.vector_observations
-
+        
         #Generate rollout from an entire episode
         while True:
 
@@ -61,6 +61,7 @@ class Agent:
 
     def process_rollout(self, rollout, last_value):
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        
         processed_rollout = [None] * (len(rollout) - 1)
         advantages = torch.zeros((self.num_agents, 1)).to(device)
         returns = last_value.detach()
@@ -106,16 +107,11 @@ class Agent:
                 self.optimizer.step()
 
     def step(self):
-        # Run a single episode to generate a rollout
         rollout, last_value, episode_rewards = self.generate_rollout()
-        # Process the rollout to calculate advantages
         processed_rollout = self.process_rollout(rollout, last_value)
         states, actions, log_probs_old, returns, advantages = map(lambda x: torch.cat(x, dim=0), zip(*processed_rollout))
-        # Normalize the advantages
         advantages = (advantages - advantages.mean()) / advantages.std()
-        # Train the network
         self.train_network(states, actions, log_probs_old, returns, advantages)
-        #Return the average reward across all agents for this episode
         return np.mean(episode_rewards)
 
 
