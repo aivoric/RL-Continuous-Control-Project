@@ -42,6 +42,24 @@ The architecture is a simple Linear model for both the Actor and the Critic:
 ## Future Improvements
 
 Further improvements should include:
-- Testing other network architectures
-- Trying other algorithms
-- Trying other hyperparameters
+
+__Network architectures__ 
+Currently a very simple network architecture is used. In many cases this is enough, however at 
+times trying a network architecture with more layers and more neurons can yield better results.
+
+__Try other algorithms__
+I would try TRPO and DDPG as alternative learning algorithms. It's difficult to know which learning 
+algorithm would work best for this task. PPO seemed like a good choice for this task, but intuition says
+that DDPG could achieve better results.
+
+__Try other hyperparameters__
+The current set of hyperparameters were determined mostly based on intuition from previous work. 
+I would like to especially experiment with setting different tau, batch sizes, and learning rounds.
+
+__Try more agents__
+In the exercise we trained with 20 agents, but what if more simultaneous agents were used? Would that 
+improve training? This would be a good hypothesis to test.
+
+__Learn from real life__
+The final improvement is to try move this virtual simulation to a real robotic arm, and use the algorithm
+there, or at least a similar version of it depending on whether the state and action sizes vary.

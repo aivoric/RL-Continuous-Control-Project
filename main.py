@@ -1,3 +1,10 @@
+"""
+### main.py ###
+- Entry point into training the algorithm.
+- Import and create instances of the environment (Reacher) and Agent, then 
+pass then on into a training function.
+"""
+
 import numpy as np
 import torch
 from collections import deque
@@ -29,7 +36,9 @@ state_size = brain.vector_observation_space_size
 print('State size::', state_size)
     
 def a2c(agent, num_agents, num_episodes=300):
-
+    """
+    Training loop which runs across episodes and collects scores.
+    """
     all_scores = []
     scores_window = deque(maxlen=100)
     first_solve = True

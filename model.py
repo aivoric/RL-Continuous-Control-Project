@@ -3,7 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class FCNetwork(nn.Module):
-
+    """
+    Fully connected network which is used to build both
+    the Actor and the Critic with only minor differences
+    in how the output is generated, i.e. action size and what
+    activation function is used.
+    """
     def __init__(self, state_size, action_size, output=None):
 
         super(FCNetwork, self).__init__()
@@ -24,7 +29,12 @@ class FCNetwork(nn.Module):
         return x
 
 class ActorCriticNetwork(nn.Module):
-
+    """
+    Initialises and contains the Actor and the Critic network
+    using the FCNetwork class.
+    The actor is initilised with a tanh activation function in the outout.
+    The critic returns a single output with no activation function.
+    """
     def __init__(self, state_size, action_size):
         super(ActorCriticNetwork, self).__init__()
 
